@@ -1,5 +1,5 @@
 {
-  "validatedAt": "2026-08-15T02:08:48.269Z",
+  "validatedAt": "2026-08-15T02:16:26.070Z",
   "source": "ANAF",
   "brand": "COERA",
   "anaf": {
@@ -98,7 +98,7 @@
     "brand": "COERA",
     "status": "activ",
     "location": [
-      "Tăietura Turcului, 24, Municipiul Cluj-Napoca, Cluj"
+      "Cluj-Napoca"
     ],
     "website": [
       "https://co-era.com"
@@ -106,9 +106,9 @@
     "career": [
       "https://www.co-era.com/careers/"
     ],
-    "lastScraped": "2026-07-26",
-    "scraperFile": "https://raw.githubusercontent.com/sebiboga/coera-bc-srl-nodejs-scraper/main/.github/workflows/job-seeker-ro-spider.yml",
-    "_version_": 1871765834029858800,
+    "lastScraped": "2026-08-15",
+    "scraperFile": "https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/actions/workflows/job-seeker-ro-spider.yml",
+    "_version_": 1873553564309127200,
     "_root_": "32519996"
   },
   "summary": {

@@ -17,7 +17,7 @@ This scraper was derived from the [EPAM template](https://github.com/sebiboga/ep
 
 ```bash
 # Clone your fork
-git clone https://github.com/sebiboga/coera-bc-srl-nodejs-scraper.git
+git clone https://github.com/peviitor-scrapers/coera-bc-srl-nodejs-scraper.git
 
 # Install dependencies
 npm install
@@ -28,7 +28,7 @@ npm test
 
 ## Reporting Issues
 
-Open a [GitHub Issue](https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/issues) with:
+Open a [GitHub Issue](https://github.com/peviitor-scrapers/coera-bc-srl-nodejs-scraper/issues) with:
 - Clear description of the problem
 - Steps to reproduce
 - Expected vs actual behavior

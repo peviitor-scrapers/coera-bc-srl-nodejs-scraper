@@ -6,5 +6,5 @@
   "location": ["Cluj-Napoca"],
   "website": ["https://co-era.com"],
   "career": ["https://www.co-era.com/careers/"],
-  "scraperFile": "https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/actions/workflows/job-seeker-ro-spider.yml"
+  "scraperFile": "https://github.com/peviitor-scrapers/coera-bc-srl-nodejs-scraper/actions/workflows/job-seeker-ro-spider.yml"
 }
