@@ -4,32 +4,27 @@ Thank you for your interest in contributing!
 
 ## 🌱 This Repo Is a Derived Scraper
 
-This repo is **derived from** [job_seeker_ro_spider](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper) (the EPAM template — reference implementation for the peviitor.ro ecosystem).
-
-**What that means for contributors:**
-
-- **Bug fixes specific to COERA scraping** (the `a.careerButton` selector, title cleanup, city extraction from "| City1 & City2" suffix) belong here.
-- **Structural improvements** (pipeline architecture, test patterns, caching strategy, config layout, CI workflows) should be proposed in the **EPAM template repo** instead — so every derived scraper benefits.
-- **Looking to create a scraper for a different company?** Fork [the template](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper), not this repo.
+This scraper was derived from the [EPAM template](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper). It follows the same structure, workflows, and testing patterns as all scrapers in the peviitor.ro ecosystem.
 
 ## Code Style
 
 - Use ES6+ modules (`type: module` in `package.json`)
 - Add tests for new features in the matching `tests/<level>/` folder
-- Ensure all tests pass before submitting a PR (`npm test`)
+- Ensure all tests pass before submitting PR
 - Update relevant `.md` files when adding new files
-- Reference a GitHub issue in every commit (see [ISSUES.md](ISSUES.md))
 
 ## Development Setup
 
 ```bash
+# Clone your fork
 git clone https://github.com/sebiboga/coera-bc-srl-nodejs-scraper.git
-cd coera-bc-srl-nodejs-scraper
+
+# Install dependencies
 npm install
+
+# Run tests
 npm test
 ```
-
-`SOLR_AUTH` is required for integration/e2e tests — set it in `.env.local`.
 
 ## Reporting Issues
 

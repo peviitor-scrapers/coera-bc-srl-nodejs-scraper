@@ -1,0 +1,5 @@
+{
+  "apiBase": "https://www.co-era.com",
+  "apiListPath": "/careers/",
+  "defaultLocation": "Cluj-Napoca"
+}

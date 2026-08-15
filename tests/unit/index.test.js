@@ -4,7 +4,7 @@ describe('index.js Component Tests', () => {
   let index;
 
   beforeAll(async () => {
-    index = await import('../../index.js');
+    index = await import('../../scraper/index.js');
   });
 
   describe('transformJobsForSOLR', () => {
@@ -34,7 +34,7 @@ describe('index.js Component Tests', () => {
         company: 'coera bc srl',
         cif: '32519996',
         jobs: [
-          { url: 'https://test.com/1', title: 'Job 1', company: 'coera systems', cif: '32519996' }
+          { url: 'https://test.com/1', title: 'Job 1', company: 'coera bc srl', cif: '32519996' }
         ]
       };
 
@@ -67,12 +67,30 @@ describe('index.js Component Tests', () => {
     });
   });
 
+  describe('extractCities', () => {
+    it('extracts cities from the location segment after the pipe', () => {
+      const cities = index.extractCities('Go beyond for your role! | Cluj & Brasov');
+      expect(cities).toContain('Cluj-Napoca');
+      expect(cities).toContain('Brașov');
+    });
+
+    it('returns empty array when no pipe is present', () => {
+      expect(index.extractCities('Go beyond for your role!')).toEqual([]);
+    });
+
+    it('normalizes non-diacritic spellings', () => {
+      const cities = index.extractCities('Position | Bucuresti & Iasi');
+      expect(cities).toContain('București');
+      expect(cities).toContain('Iași');
+    });
+  });
+
   describe('mapToJobModel', () => {
     it('should map raw job to job model format', () => {
       const rawJob = {
-        url: 'https://www.co-era.com/job/123',
-        title: 'Senior Developer',
-        location: ['Bucharest'],
+        url: 'https://www.co-era.com/careers/go-beyond/',
+        title: 'Go beyond for your role!',
+        location: ['Cluj-Napoca', 'Brașov'],
         tags: ['Java', 'Spring'],
         workmode: 'hybrid'
       };
@@ -116,7 +134,7 @@ describe('index.js Component Tests', () => {
     });
   });
 
-  describe('parseHtmlJobs (COERA HTML scraping)', () => {
+  describe('parsePageJobs (COERA HTML scraping)', () => {
     const sampleHtml = `
       <a class="slot__anchor careerButton" href="/careers/summer-practice-program/" title="Summer Practice Program in Software Engineering | 2026">
         Summer Practice
@@ -130,7 +148,7 @@ describe('index.js Component Tests', () => {
     `;
 
     it('parses titles, stripping the trailing "| ..." segment', () => {
-      const { jobs, total } = index.parseHtmlJobs(sampleHtml);
+      const { jobs, total } = index.parsePageJobs(sampleHtml);
       expect(total).toBe(3);
       expect(jobs[0].title).toBe('Summer Practice Program in Software Engineering');
       expect(jobs[1].title).toBe('Go beyond for your role!');
@@ -138,25 +156,37 @@ describe('index.js Component Tests', () => {
     });
 
     it('builds absolute URLs from relative hrefs and keeps absolute ones', () => {
-      const { jobs } = index.parseHtmlJobs(sampleHtml);
+      const { jobs } = index.parsePageJobs(sampleHtml);
       expect(jobs[0].url).toBe('https://www.co-era.com/careers/summer-practice-program/');
       expect(jobs[2].url).toBe('https://www.co-era.com/careers/full-link/');
     });
 
+    it('extracts cities from the title location segment', () => {
+      const { jobs } = index.parsePageJobs(sampleHtml);
+      expect(jobs[1].location).toContain('Cluj-Napoca');
+      expect(jobs[1].location).toContain('Brașov');
+    });
+
     it('falls back to defaultLocation when no city is in title', () => {
-      const { jobs } = index.parseHtmlJobs(sampleHtml);
+      const { jobs } = index.parsePageJobs(sampleHtml);
       expect(jobs[0].location).toEqual(['Cluj-Napoca']);
     });
 
     it('sets workmode to hybrid', () => {
-      const { jobs } = index.parseHtmlJobs(sampleHtml);
+      const { jobs } = index.parsePageJobs(sampleHtml);
       expect(jobs[0].workmode).toBe('hybrid');
     });
 
     it('returns empty when no .careerButton anchors are present', () => {
-      const { jobs, total } = index.parseHtmlJobs('<html><body><a href="/x">no</a></body></html>');
+      const { jobs, total } = index.parsePageJobs('<html><body><a href="/x">no</a></body></html>');
       expect(jobs).toEqual([]);
       expect(total).toBe(0);
+    });
+
+    it('decodes HTML entities in titles', () => {
+      const html = '<a class="careerButton" href="/careers/x/" title="Frontend &amp; Backend | Cluj">X</a>';
+      const { jobs } = index.parsePageJobs(html);
+      expect(jobs[0].title).toBe('Frontend & Backend');
     });
   });
 });

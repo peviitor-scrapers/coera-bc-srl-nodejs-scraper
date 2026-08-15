@@ -1,0 +1,121 @@
+{
+  "validatedAt": "2026-08-15T02:08:48.269Z",
+  "source": "ANAF",
+  "brand": "COERA",
+  "anaf": {
+    "cui": 32519996,
+    "name": "COERA BC SRL",
+    "address": "JUD. CLUJ, MUN. CLUJ-NAPOCA, STR. TĂIETURA TURCULUI, NR.24, ET.5, AP.503B",
+    "registrationNumber": "J2013003471128",
+    "phone": "0746151241",
+    "fax": "",
+    "postalCode": "",
+    "caenCode": "6210",
+    "iban": "",
+    "registrationState": "INREGISTRAT din data 27.11.2013",
+    "registrationDate": "2013-11-27",
+    "fiscalAuthority": "Administraţia Fiscală pentru Contribuabili Mijlocii - Cluj",
+    "ownershipForm": "PROPR.PRIVATA-CAPITAL PRIVAT STRAIN",
+    "organizationForm": "PERSOANA JURIDICA",
+    "legalForm": "SOCIETATE COMERCIALĂ CU RĂSPUNDERE LIMITATĂ",
+    "vatRegistered": true,
+    "vatPeriods": [
+      {
+        "start": "2013-12-17",
+        "end": null,
+        "yearStart": "",
+        "message": ""
+      }
+    ],
+    "cashBasisVat": false,
+    "cashBasisVatStart": "2013-12-17",
+    "cashBasisVatEnd": "2016-09-01",
+    "inactive": false,
+    "inactiveSince": null,
+    "reactivatedSince": null,
+    "splitVat": false,
+    "eFacturaRegistered": false,
+    "headquartersAddress": {
+      "street": "Str. Tăietura Turcului",
+      "number": "24",
+      "locality": "Mun. Cluj-Napoca",
+      "county": "CLUJ",
+      "country": "",
+      "postalCode": ""
+    },
+    "fiscalAddress": {
+      "street": "",
+      "number": "",
+      "locality": "",
+      "county": "",
+      "country": "",
+      "postalCode": ""
+    },
+    "administrators": [
+      {
+        "name": "BORODI ANCA-MIHAELA",
+        "role": "administrator"
+      }
+    ],
+    "authorizedCaenCodes": [
+      "5210",
+      "5821",
+      "5829",
+      "6210",
+      "6220",
+      "6290",
+      "6310",
+      "6391",
+      "6392",
+      "6820",
+      "7020",
+      "7111",
+      "7112",
+      "7120",
+      "7210",
+      "7311",
+      "7312",
+      "7320",
+      "7330",
+      "7411",
+      "7412",
+      "7413",
+      "7414",
+      "7430",
+      "7499",
+      "8210",
+      "8299",
+      "8559",
+      "8569",
+      "9510"
+    ],
+    "onrcStatus": 0,
+    "onrcStatusLabel": "Funcțiune"
+  },
+  "peviitor": {
+    "id": "32519996",
+    "company": "COERA BC SRL",
+    "brand": "COERA",
+    "status": "activ",
+    "location": [
+      "Tăietura Turcului, 24, Municipiul Cluj-Napoca, Cluj"
+    ],
+    "website": [
+      "https://co-era.com"
+    ],
+    "career": [
+      "https://www.co-era.com/careers/"
+    ],
+    "lastScraped": "2026-07-26",
+    "scraperFile": "https://raw.githubusercontent.com/sebiboga/coera-bc-srl-nodejs-scraper/main/.github/workflows/job-seeker-ro-spider.yml",
+    "_version_": 1871765834029858800,
+    "_root_": "32519996"
+  },
+  "summary": {
+    "company": "COERA BC SRL",
+    "cif": "32519996",
+    "active": true,
+    "inactiveSince": null,
+    "address": "JUD. CLUJ, MUN. CLUJ-NAPOCA, STR. TĂIETURA TURCULUI, NR.24, ET.5, AP.503B"
+  }
+}

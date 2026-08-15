@@ -1,4 +1,4 @@
-# job_seeker_ro_spider — COERA Careers Romania Scraper
+# job_seeker_ro_spider — COERA Scraper
 
 [![Oportunitati SI Cariere](https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/actions/workflows/job-seeker-ro-spider.yml/badge.svg)](https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/actions/workflows/job-seeker-ro-spider.yml)
 [![Automation Tests](https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/actions/workflows/automation-testing.yml/badge.svg)](https://github.com/sebiboga/coera-bc-srl-nodejs-scraper/actions/workflows/automation-testing.yml)
@@ -13,9 +13,11 @@
 [![SOLR](https://img.shields.io/website?url=https%3A%2F%2Fsolr.peviitor.ro%2Fsolr%2F&label=solr.peviitor.ro)](https://solr.peviitor.ro/solr/)
 [![GitHub Pages](https://img.shields.io/github/deployments/sebiboga/coera-bc-srl-nodejs-scraper/github-pages?label=GitHub%20Pages)](https://sebiboga.github.io/coera-bc-srl-nodejs-scraper/)
 
-**job_seeker_ro_spider** — un scraper pentru job-urile COERA BC SRL din România. Extrage anunțurile de pe [co-era.com/careers](https://www.co-era.com/careers/) (HTML scraping cu cheerio, single-page) și le publică în [peviitor.ro](https://peviitor.ro) prin API-ul SOLR.
+**job_seeker_ro_spider** — un scraper pentru job-urile COERA BC SRL din România. Extrage anunțurile de pe [COERA Careers](https://www.co-era.com/careers/) și le publică în [peviitor.ro](https://peviitor.ro) prin API-ul Peviitor.
 
-> **🌱 Derivat din [job_seeker_ro_spider](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper) (template).** Pentru pattern-ul complet de derivare, vezi [CONTRIBUTING.md](CONTRIBUTING.md) din template.
+> **🌱 Derived scraper.** Acest repo a fost derivat din [EPAM template](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper). Identitatea companiei trăiește în `scraper/config/company.json`.
+> 
+> Derivat din: `sebiboga/epam-systems-international-srl-nodejs-scraper`
 
 ## Overview
 
@@ -23,68 +25,50 @@ Proiectul automatizează colectarea zilnică a job-urilor COERA din România, me
 
 ## Features
 
-- Extrage job-uri de pe pagina HTML `co-era.com/careers` (cheerio, single-page)
-- Validează compania via ANAF (CUI, status activ/inactiv, adresă completă)
+- Extrage job-uri de pe COERA Careers HTML (`/careers/`)
+- Validează compania via ANAF (CIF, status activ/inactiv, adresă completă)
 - **Cache ANAF la 7 zile** — committed în repo, nu lovește demoANAF la fiecare scrape
 - **Fallback la cache stale** dacă ANAF e indisponibil
-- Cross-validează cu Peviitor API
-- Stochează în SOLR (job core + company core)
+- Stochează prin Peviitor API (job core + company core)
 - Generează `docs/jobs.md` automat — accesibil pe GitHub Pages
-- **Identitate companie într-un singur fișier** (`config/company.json`) — derivare ușoară pentru alte companii
+- **Identitate companie într-un singur fișier** (`scraper/config/company.json`)
 - GitHub Actions: scrape zilnic + testare automată (unit, integration, e2e, consistency)
-- Teste SOLR condiționale — auto-skip când `SOLR_AUTH` nu e setat
+- Fără `SOLR_AUTH` — toate operațiile merg prin Peviitor API (public)
 - Se identifică prin User-Agent: `job_seeker_ro_spider`
+- Include ANOFM scraping (API public filtrat pe CIF)
 
 ## Project Structure
 
 ```
-├── index.js                    # Main scraper entry point
-├── company.js                  # Company validation via ANAF + Peviitor + SOLR
-├── demoanaf.js                 # CLI wrapper for src/anaf.js
-├── solr.js                     # SOLR operations (query, upsert, delete, company)
-├── validate-jobs.js            # Job URL validator — checks active/expired, deletes stale jobs
-├── config/
-│   ├── company.json            # Single source of truth: CIF, brand, URLs, API params
-│   └── company.js              # ESM loader for company.json
-├── src/
-│   ├── anaf.js                 # ANAF API core module (search + company details)
-│   ├── markdown-generator.js   # Generates docs/jobs.md from scraped data
-│   └── job-validator.js        # Shared validateByHead + validateByContent
-├── company.json                # ANAF data cache (committed, 7-day TTL)
+├── scraper/
+│   ├── index.js                    # Main scraper entry point
+│   ├── company.js                  # Company validation via ANAF + Peviitor
+│   ├── anaf.js                     # ANAF API core module
+│   ├── api.js                      # Peviitor API (query, upsert, delete)
+│   ├── markdown-generator.js       # Generates docs/jobs.md
+│   ├── job-validator.js            # Shared job validation
+│   ├── validate-jobs.js            # Deep validator CLI
+│   ├── demoanaf.js                 # ANAF CLI
+│   └── config/
+│       ├── company.json            # Single source of truth: id, brand, URLs
+│       ├── company.js              # ESM loader for company.json
+│       ├── scraper.json            # apiBase config
+│       └── scraper.js              # ESM loader for scraper.json
+├── company.json                    # ANAF data cache (committed, 7-day TTL)
+├── ai/                             # Project documentation
 ├── tests/
-│   ├── package.json            # Jest config for test suite
-│   ├── company.json            # Mock ANAF data used in unit tests
-│   ├── validate-coera-jobs.js   # SOLR job URL validation script
-│   ├── unit/
-│   │   ├── index.test.js       # Tests for parseApiJobs, mapToJobModel, transformJobsForSOLR
-│   │   ├── company.test.js     # Tests for validateAndGetCompany, fallback caching
-│   │   ├── solr.test.js        # Tests for query, upsert, delete operations
-│   │   └── demoanaf.test.js    # Tests for ANAF search and company retrieval
-│   ├── integration/
-│   │   └── workflow.test.js    # Live ANAF + SOLR integration tests
-│   ├── e2e/
-│   │   └── scraper.test.js     # Full pipeline tests with real COERA API
-│   └── consistency/
-│       ├── public.test.js      # Verifies repo is public
-│       ├── repo.test.js        # Verifies branch, Pages, secrets, workflows
-│       ├── topics.test.js      # Verifies required repo topics
-│       └── workflow-naming.test.js  # Validates workflow naming conventions
+│   ├── unit/                       # Unit tests (parsePageJobs, mapToJobModel, transformJobsForSOLR)
+│   ├── integration/                # Integration tests (ANAF + Peviitor live)
+│   ├── e2e/                        # E2E tests (real COERA careers page)
+│   └── consistency/                # Repo configuration tests
 ├── docs/
 │   ├── index.html              # Live job board (GitHub Pages)
-│   ├── jobs.md                 # Scraped jobs in markdown (generated by CI)
-│   ├── README.md
-│   └── test-results/           # Test reports (generated by CI)
-│       ├── index.html
-│       ├── pre-scrape-unit.html
-│       ├── pre-scrape-integration.html
-│       ├── post-scrape.html
-│       └── post-scrape-consistency.html
-├── .github/
-│   ├── CODEOWNERS
-│   └── workflows/
-│       ├── job-seeker-ro-spider.yml     # Daily scraping at 6 AM UTC
-│       └── automation-testing.yml       # Automation Tests on push/PR
-└── package.json
+│   └── jobs.md                 # Scraped jobs in markdown (generated by CI)
+└── .github/
+    └── workflows/
+        ├── job-seeker-ro-spider.yml     # Daily scraping at 6 AM UTC
+        ├── automation-testing.yml       # Tests on push/PR
+        └── job-recovery-from-disaster.yml  # Company core recovery
 ```
 
 ## Setup
@@ -102,11 +86,7 @@ npm install
 
 ### Configuration
 
-Set the `SOLR_AUTH` environment variable with your Solr credentials:
-
-```bash
-export SOLR_AUTH="username:password"
-```
+Nu e necesară nicio variabilă de mediu — toate operațiile merg prin Peviitor API (public, fără autentificare).
 
 ## Usage
 
@@ -119,46 +99,31 @@ npm run scrape
 ### Run Tests
 
 ```bash
-# All tests
-npm test
-
-# Unit tests only
-npm run test:unit
-
-# Integration tests
-npm run test:integration
-
-# E2E tests
-npm run test:e2e
+npm test           # All tests
+npm run test:unit  # Unit tests only
+npm run test:integration  # Integration tests
+npm run test:e2e   # E2E tests
 ```
 
 ## Workflows
 
 ### Daily Scraping
 
-The `job-seeker-ro-spider.yml` workflow runs daily at 6 AM UTC via GitHub Actions. It:
-1. Runs pre-scrape tests (unit + integration)
-2. Validates company data via ANAF
-3. Scrapes current job listings from COERA Careers
-4. Updates Solr with new/removed jobs
-5. Runs post-scrape tests (e2e + consistency)
-6. Uploads test results and job data as artifacts
-7. Generates [`docs/jobs.md`](https://sebiboga.github.io/coera-bc-srl-nodejs-scraper/jobs.md) with company info and all scraped jobs
-8. Pushes test reports and `docs/jobs.md` to [`docs/`](https://sebiboga.github.io/coera-bc-srl-nodejs-scraper/)
+The `job-seeker-ro-spider.yml` workflow runs daily at 6 AM UTC via GitHub Actions.
 
 ### Test Automation
 
-The `automation-testing.yml` workflow runs on every push and pull request. It:
-1. Ensures COERA exists in the company core
-2. Runs unit, integration, e2e, and consistency tests
-3. Validates data integrity in Solr
-4. Pushes test reports to [`docs/test-results/`](https://sebiboga.github.io/coera-bc-srl-nodejs-scraper/test-results/)
+The `automation-testing.yml` workflow runs on every push and pull request.
+
+## Derivation
+
+This scraper was derived from the [EPAM template](https://github.com/sebiboga/epam-systems-international-srl-nodejs-scraper) using the autonomous derivation algorithm documented in [ALGORITHM.md](https://github.com/sebiboga/AI-Factory-job-seeker-ro-spider/blob/main/ALGORITHM.md).
 
 ## Acknowledgments
 
-This project was developed with assistance from **[Claude Code](https://claude.ai/code)** by Anthropic.
+Developed with the assistance of AI agents executing the derivation algorithm from the EPAM template.
 
-Special thanks to the open source community and the peviitor.ro team for their support.
+Special thanks to the open source community and the peviitor.ro team.
 
 ## License
 
@@ -172,14 +137,8 @@ This project is managed by [ASOCIATIA OPORTUNITATI SI CARIERE](https://oportunit
 
 ## Robots.txt Policy
 
-Acest scraper respectă regulile din [robots.txt](https://www.co-era.com/robots.txt) al COERA Careers. Pentru analiza completă, vezi [ROBOTS.md](ROBOTS.md).
+This scraper respects the rules from [robots.txt](https://www.co-era.com/robots.txt) of COERA.
 
-**Puncte cheie:**
-- API-ul `/api/*` este `Disallow` în robots.txt — scraper-ul îl folosește, dar cu rate limiting și un singur User-Agent identificabil (`job_seeker_ro_spider`)
-- Paginile individuale de job (`/*/vacancy/*`) sunt `Disallow` — scraper-ul NU le parsează, doar le verifică accesibilitatea via HEAD request
-- Endpoint-urile permise (`/`, `/en/jobs`) nu sunt scraper-uite
-- Comportament: 1 cerere/10 job-uri, delay 1s între pagini, fără concurență
-
-## Disclaimer
-
-This scraper is designed for educational purposes and legitimate job data aggregation for the Romanian job market. Please respect COERA's Terms of Service and robots.txt when using this scraper.
+**Key points:**
+- The `/careers/` search page is **allowed** by robots.txt (only `/img/` is disallowed)
+- Scraper behavior: 1 request per scrape, no concurrent requests

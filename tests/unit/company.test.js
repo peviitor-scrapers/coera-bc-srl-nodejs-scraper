@@ -42,37 +42,35 @@ function peviitorResponse(companies) {
   };
 }
 
-function solrResponse(numFound, docs) {
+function solrResponse(total, data) {
   return {
     ok: true,
-    json: async () => ({ response: { numFound, docs } })
+    json: async () => ({ total, data })
   };
 }
 
 const COERA_ANAF_RECORD = {
   cui: 32519996,
   name: 'COERA BC SRL',
-  address: 'IANCU DE HUNEDOARA, 48, Bucureşti Sectorul 1, Bucureşti',
-  caenCode: '6220',
+  address: 'JUD. CLUJ, MUN. CLUJ-NAPOCA, STR. TĂIETURA TURCULUI, NR.24, ET.5, AP.503B',
+  caenCode: '6210',
   inactive: false,
   vatRegistered: true,
   eFacturaRegistered: false,
-  headquartersAddress: { locality: 'Bucureşti Sectorul 1' }
+  headquartersAddress: { locality: 'Cluj-Napoca' }
 };
 
 describe('company.js', () => {
   let company;
 
   beforeAll(async () => {
-    process.env.SOLR_AUTH = 'test:test';
     fs.mkdirSync("tmp", { recursive: true });
     backupFile(COMPANY_JSON_PATH);
     backupFile(ROOT_COMPANY_JSON_PATH);
-    company = await import('../../company.js');
+    company = await import('../../scraper/company.js');
   });
 
   afterAll(() => {
-    delete process.env.SOLR_AUTH;
     restoreFile(COMPANY_JSON_PATH);
     restoreFile(ROOT_COMPANY_JSON_PATH);
   });
@@ -156,7 +154,7 @@ describe('company.js', () => {
       expect(typeof result.existingJobsCount).toBe('number');
     });
 
-    // Epam e activă — testul inactive se rulează doar dacă firma e inactivă
+    // COERA e activă — testul inactive se rulează doar dacă firma e inactivă
     if (COERA_ANAF_RECORD.inactive) {
       it('should return inactive status when company is inactive', async () => {
         const inactiveRecord = { ...COERA_ANAF_RECORD, inactive: true };

@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import companyConfig from "../../config/company.js";
+import companyConfig from "../../scraper/config/company.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = process.env.GITHUB_REPOSITORY;
@@ -79,17 +79,6 @@ describe("Repository Configuration", () => {
       expect(html).toContain("peviitor");
       expect(html.toLowerCase()).toContain(companyConfig.brand.toLowerCase());
       console.log(`✅ GitHub Pages HTML loaded from ${pagesUrl}`);
-    });
-  });
-
-  describe("SOLR_AUTH secret", () => {
-    it("should be defined in CI environment", () => {
-      if (!REPO) {
-        console.log("GITHUB_REPOSITORY not set — running locally, skipping");
-        return;
-      }
-      expect(process.env.SOLR_AUTH).toBeTruthy();
-      console.log("✅ SOLR_AUTH is set");
     });
   });
 
