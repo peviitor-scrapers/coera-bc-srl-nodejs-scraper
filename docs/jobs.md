@@ -10,11 +10,11 @@
 | Location | JUD. CLUJ, MUN. CLUJ-NAPOCA, STR. TĂIETURA TURCULUI, NR.24, ET.5, AP.503B |
 | Website | [https://co-era.com](https://co-era.com) |
 | Careers | [https://www.co-era.com/careers/](https://www.co-era.com/careers/) |
-| Last Scraped | 2026-08-16 |
+| Last Scraped | 2026-08-17 |
 
 ## Current Job Listings (1)
 
-_Generated: 2026-08-16T06:51:34.074Z_
+_Generated: 2026-08-17T07:08:48.250Z_
 
 ### Go beyond for your role!
 
