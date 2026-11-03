@@ -10,11 +10,11 @@
 | Location | JUD. CLUJ, MUN. CLUJ-NAPOCA, STR. TĂIETURA TURCULUI, NR.24, ET.5, AP.503B |
 | Website | [https://co-era.com](https://co-era.com) |
 | Careers | [https://www.co-era.com/careers/](https://www.co-era.com/careers/) |
-| Last Scraped | 2026-11-02 |
+| Last Scraped | 2026-11-03 |
 
 ## Current Job Listings (2)
 
-_Generated: 2026-11-02T15:29:41.952Z_
+_Generated: 2026-11-03T13:59:04.450Z_
 
 ### Software Engineer
 
